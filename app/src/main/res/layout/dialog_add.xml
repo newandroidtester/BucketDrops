@@ -25,7 +25,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_title"
         android:hint="@string/hint_et_drop"
-        android:padding="16dp"/>
+        android:padding="16dp"
+        android:inputType="textVisiblePassword"
+        />
 
     <DatePicker
             android:id="@+id/bpv_date"
