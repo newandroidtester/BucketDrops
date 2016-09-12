@@ -11,6 +11,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import slidenerd.vivz.bucketdrops.beans.Drop;
+
 /**
  * Created by Lilla és Levi on 2016.09.05..
  */
@@ -24,9 +28,37 @@ public class DialogAdd extends DialogFragment{
     private View.OnClickListener mBtnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            int id = view.getId();
             dismiss();
+            switch (id){
+                case R.id.btn_add_it:
+                    addAction();
+                    break;
+
+            }
         }
     };
+
+    //TODO process date
+    private void addAction() {
+        //get the value of the goal or 'to-do'
+        //get the time when it was added
+        String what=mInputWhat.getText().toString();
+        long now = System.currentTimeMillis();
+
+        RealmConfiguration configuration = new RealmConfiguration.Builder(getActivity()).build();
+        Realm.setDefaultConfiguration(configuration);
+
+        Realm realm = Realm.getDefaultInstance();
+        //0 because of custom widget, false by default
+        Drop drop = new Drop(what, now, 0, false);
+        realm.beginTransaction();
+        realm.copyToRealm(drop);
+        realm.commitTransaction();
+        realm.close();
+
+
+    }
 
     public DialogAdd() {
 
@@ -76,6 +108,7 @@ public class DialogAdd extends DialogFragment{
         mBtnAdd= (Button) view.findViewById(R.id.btn_add);
 
         mBtnClose.setOnClickListener(mBtnClickListener);
+        mBtnAdd.setOnClickListener(mBtnClickListener);
 
     }
 }
